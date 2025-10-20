@@ -1,114 +1,108 @@
 /**
  *
- * @author Elsy Joselyn Godinez Juarez
+ * @author Elsy Joselyn Godinez Juarez 
  */
-public class ListaDoble {
+public class ListaCircular {
+    
 class Nodo {
     String dato;
-    Nodo siguiente;
-    Nodo anterior;
+    Nodo sig; 
 
     public Nodo(String dato) {
         this.dato = dato;
-        this.siguiente = null;
-        this.anterior = null;
+        this.sig = null;
     }
 }
-
 
     private Nodo cabeza; 
 
    
-    public ListaDoble() {
+    public ListaCircular() {
         cabeza = null;
     }
+    public void crearListaInicial() {
+        Nodo rojo = new Nodo("Rojo");
+        Nodo verde = new Nodo("Verde");
+        Nodo azul = new Nodo("Azul");
+        Nodo amarillo = new Nodo("Amarillo");
 
-    public void crearNodo(String dato) {
-        Nodo nuevo = new Nodo(dato);
+        rojo.sig = verde;
+        verde.sig = azul;
+        azul.sig = amarillo;
+        amarillo.sig = rojo; 
 
-        if (cabeza == null) {
-            cabeza = nuevo;
-        } else {
-            Nodo temp = cabeza;
-            while (temp.siguiente != null) {
-                temp = temp.siguiente;
-            }
-            temp.siguiente = nuevo;
-            nuevo.anterior = temp;
+        cabeza = rojo;
+        System.out.println("Lista circular creada correctamente.");
+    }
+    public void recorrerUnaVuelta() {
+        if (cabeza == null) return;
+
+        Nodo aux = cabeza;
+        System.out.println("\nRecorrido circular (1 vuelta):");
+        do {
+            System.out.print("[" + aux.dato + "] → ");
+            aux = aux.sig;
+        } while (aux != cabeza);
+        System.out.println("(vuelve al inicio)");
+    }
+
+ 
+    public void insertarMorado() {
+        if (cabeza == null) return;
+
+        Nodo aux = cabeza;
+        while (!aux.dato.equals("Azul")) {
+            aux = aux.sig;
         }
 
-        System.out.println("Nodo creado: " + dato);
+        Nodo nuevo = new Nodo("Morado");
+        nuevo.sig = aux.sig; 
+        aux.sig = nuevo;     
+
+        System.out.println("\nInsertado 'Morado' entre Azul y Amarillo.");
+    }
+    public void eliminar(String dato) {
+        if (cabeza == null) return;
+
+        Nodo aux = cabeza;
+        Nodo anterior = null;
+
+        do {
+            if (aux.dato.equals(dato)) {
+                if (anterior != null) {
+                    anterior.sig = aux.sig;
+                } else { // si es el primero
+                    Nodo temp = cabeza;
+                    while (temp.sig != cabeza) {
+                        temp = temp.sig;
+                    }
+                    cabeza = aux.sig;
+                    temp.sig = cabeza;
+                }
+                System.out.println("\nEliminado nodo: " + dato);
+                return;
+            }
+            anterior = aux;
+            aux = aux.sig;
+        } while (aux != cabeza);
+
+        System.out.println("\nNo se encontró el nodo: " + dato);
     }
 
     
-    public void insertarDespuesDe(String referencia, String nuevoDato) {
-        Nodo temp = cabeza;
-
-        while (temp != null && !temp.dato.equals(referencia)) {
-            temp = temp.siguiente;
-        }
-
-        if (temp != null) {
-            Nodo nuevo = new Nodo(nuevoDato);
-            nuevo.siguiente = temp.siguiente;
-            nuevo.anterior = temp;
-
-            if (temp.siguiente != null) {
-                temp.siguiente.anterior = nuevo;
-            }
-
-            temp.siguiente = nuevo;
-
-            System.out.println("Insertado " + nuevoDato + " después de " + referencia);
-        } else {
-            System.out.println("No se encontró el nodo con dato: " + referencia);
-        }
-    }
-    public void recorrerAdelante() {
-        Nodo temp = cabeza;
-        System.out.println("\nRecorrido hacia adelante:");
-        while (temp != null) {
-            System.out.print("[" + temp.dato + "]");
-            if (temp.siguiente != null) {
-                System.out.print(" ↔ ");
-            }
-            temp = temp.siguiente;
-        }
-        System.out.println(" → NULL");
-    }
-
-    public void recorrerAtras() {
-        if (cabeza == null) return;
-
-        Nodo temp = cabeza;
-        while (temp.siguiente != null) {
-            temp = temp.siguiente;
-        }
-
-        System.out.println("\nRecorrido hacia atrás:");
-        while (temp != null) {
-            System.out.print("[" + temp.dato + "]");
-            if (temp.anterior != null) {
-                System.out.print(" ↔ ");
-            }
-            temp = temp.anterior;
-        }
-        System.out.println(" → NULL");
-    }
-
-
     public static void main(String[] args) {
 
-     ListaDoble lista = new ListaDoble();
+        ListaCircular lista = new ListaCircular();
 
+      
+        lista.crearListaInicial();
+        lista.recorrerUnaVuelta();
+        lista.insertarMorado();
+        lista.recorrerUnaVuelta();
         
-        lista.crearNodo("Programación");
-        lista.crearNodo("Mate");
-        lista.crearNodo("Inglés");
-
-        lista.recorrerAdelante();
-        lista.insertarDespuesDe("Programación", "Base de Datos");
-        lista.recorrerAdelante();
-        lista.recorrerAtras();
+        lista.eliminar("Verde");
+        lista.recorrerUnaVuelta();
     }
 }
+
+
