@@ -112,11 +112,3 @@ class Nodo {
         lista.recorrerAtras();
     }
 }
-
-        
-        lista.insertarDespuesDe("Carla", "Elena");
-
-       
-        lista.eliminar("Benjamín");
-    }
-}
