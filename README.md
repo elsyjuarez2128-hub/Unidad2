@@ -1,116 +1,117 @@
 /**
  *
- * @author Elsy Joselyn Godinez Juarez 
+ * @author Elsy Joselyn Godinez Juarez
  */
-
+public class ListaDoble {
 class Nodo {
     String dato;
-    Nodo sig; 
+    Nodo siguiente;
+    Nodo anterior;
 
     public Nodo(String dato) {
         this.dato = dato;
-        this.sig = null;
+        this.siguiente = null;
+        this.anterior = null;
     }
 }
 
 
-public class ListaSimpleVisual {
+    private Nodo cabeza; 
 
-    private Nodo inicio; 
-
-    public ListaSimpleVisual() {
-        inicio = null;
+   
+    public ListaDoble() {
+        cabeza = null;
     }
 
-    public void insertarFinal(String dato) {
+    public void crearNodo(String dato) {
         Nodo nuevo = new Nodo(dato);
-        if (inicio == null) {
-            inicio = nuevo;
+
+        if (cabeza == null) {
+            cabeza = nuevo;
         } else {
-            Nodo aux = inicio;
-            while (aux.sig != null) {
-                aux = aux.sig;
+            Nodo temp = cabeza;
+            while (temp.siguiente != null) {
+                temp = temp.siguiente;
             }
-            aux.sig = nuevo;
+            temp.siguiente = nuevo;
+            nuevo.anterior = temp;
         }
-        System.out.println("Insertado: " + dato);
-        mostrar();
+
+        System.out.println("Nodo creado: " + dato);
     }
 
-
+    
     public void insertarDespuesDe(String referencia, String nuevoDato) {
-        Nodo nuevo = new Nodo(nuevoDato);
-        Nodo aux = inicio;
+        Nodo temp = cabeza;
 
-        while (aux != null && !aux.dato.equals(referencia)) {
-            aux = aux.sig;
+        while (temp != null && !temp.dato.equals(referencia)) {
+            temp = temp.siguiente;
         }
 
-        if (aux != null) {
-            nuevo.sig = aux.sig;
-            aux.sig = nuevo;
-            System.out.println("\nInsertado " + nuevoDato + " después de " + referencia);
-            mostrar();
+        if (temp != null) {
+            Nodo nuevo = new Nodo(nuevoDato);
+            nuevo.siguiente = temp.siguiente;
+            nuevo.anterior = temp;
+
+            if (temp.siguiente != null) {
+                temp.siguiente.anterior = nuevo;
+            }
+
+            temp.siguiente = nuevo;
+
+            System.out.println("Insertado " + nuevoDato + " después de " + referencia);
         } else {
             System.out.println("No se encontró el nodo con dato: " + referencia);
         }
     }
-
-   
-    public void eliminar(String dato) {
-        if (inicio == null) {
-            System.out.println("La lista está vacía.");
-            return;
-        }
-
-        if (inicio.dato.equals(dato)) {
-            inicio = inicio.sig;
-            System.out.println("\nEliminado: " + dato);
-            mostrar();
-            return;
-        }
-
-      
-        Nodo aux = inicio;
-        while (aux.sig != null && !aux.sig.dato.equals(dato)) {
-            aux = aux.sig;
-        }
-
-        if (aux.sig != null) {
-            aux.sig = aux.sig.sig;
-            System.out.println("\nEliminado: " + dato);
-            mostrar();
-        } else {
-            System.out.println("No se encontró el nodo con dato: " + dato);
-        }
-    }
-
-    public void mostrar() {
-        System.out.println("\nEstado actual de la lista:");
-        Nodo aux = inicio;
-        while (aux != null) {
-            System.out.print("[" + aux.dato + "]");
-            if (aux.sig != null) {
-                System.out.print(" → ");
-            } else {
-                System.out.print(" → NULL");
+    public void recorrerAdelante() {
+        Nodo temp = cabeza;
+        System.out.println("\nRecorrido hacia adelante:");
+        while (temp != null) {
+            System.out.print("[" + temp.dato + "]");
+            if (temp.siguiente != null) {
+                System.out.print(" ↔ ");
             }
-            aux = aux.sig;
+            temp = temp.siguiente;
         }
-        System.out.println("\n");
+        System.out.println(" → NULL");
     }
 
-    
+    public void recorrerAtras() {
+        if (cabeza == null) return;
+
+        Nodo temp = cabeza;
+        while (temp.siguiente != null) {
+            temp = temp.siguiente;
+        }
+
+        System.out.println("\nRecorrido hacia atrás:");
+        while (temp != null) {
+            System.out.print("[" + temp.dato + "]");
+            if (temp.anterior != null) {
+                System.out.print(" ↔ ");
+            }
+            temp = temp.anterior;
+        }
+        System.out.println(" → NULL");
+    }
+
+
     public static void main(String[] args) {
 
-        ListaSimpleVisual lista = new ListaSimpleVisual();
+     ListaDoble lista = new ListaDoble();
 
-  
-        System.out.println("=== Creación de la lista ===");
-        lista.insertarFinal("Ana");
-        lista.insertarFinal("Benjamín");
-        lista.insertarFinal("Carla");
-        lista.insertarFinal("Diego");
+        
+        lista.crearNodo("Programación");
+        lista.crearNodo("Mate");
+        lista.crearNodo("Inglés");
+
+        lista.recorrerAdelante();
+        lista.insertarDespuesDe("Programación", "Base de Datos");
+        lista.recorrerAdelante();
+        lista.recorrerAtras();
+    }
+}
 
         
         lista.insertarDespuesDe("Carla", "Elena");
