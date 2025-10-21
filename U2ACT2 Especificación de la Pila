@@ -1,0 +1,60 @@
+# U2ACT2 Especificación de la Pila
+
+public class MainMyStack {
+
+    public static void main(String[] args) {
+        StackArray<String> nombres = new StackArray<>();
+
+        nombres.push("Luis");
+        nombres.push("Marisol");
+        nombres.push("Angel");
+
+        System.out.println("Elemento eliminado: " + nombres.pop());
+        System.out.println("Elemento eliminado: " + nombres.pop());
+        System.out.println("Elemento en el tope: " + nombres.peek());
+    }
+}
+
+class StackArray<E> implements IStack<E> {
+    private E[] elementos;
+    private int tope;
+    private static final int CAPACIDAD = 10;
+
+    @SuppressWarnings("unchecked")
+    public StackArray() {
+        elementos = (E[]) new Object[CAPACIDAD];
+        tope = -1;
+    }
+
+    @Override
+    public void push(E elemento) {
+        if (tope == elementos.length - 1) {
+            throw new RuntimeException("La pila está llena");
+        }
+        elementos[++tope] = elemento;
+    }
+
+    @Override
+    public E pop() {
+        if (isEmpty()) {
+            throw new RuntimeException("La pila está vacía");
+        }
+        return elementos[tope--];
+    }
+
+    @Override
+    public E peek() {
+        if (isEmpty()) {
+            throw new RuntimeException("La pila está vacía");
+        }
+        return elementos[tope];
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return tope == -1;
+    }
+}
+
+
+
